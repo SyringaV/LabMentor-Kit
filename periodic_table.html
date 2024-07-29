@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LabMentor Kit - Periodic Table</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    
+
+    .cta-box {
+    text-align: center;
+    margin: 20px auto 20px; /* Reduced the top margin to move the box higher */
+    max-width: 1000px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .cta-content h1 {
+    font-size: 1.8em;
+    margin-bottom: 10px;
+    }
+
+    .cta-content p {
+    font-size: 1.2em;
+    margin-bottom: 20px;
+    color: #666;
+    }
+
+    .button-container {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 20px; /* Space below the buttons */
+    }
+
+
+    .cta-button.game {
+    background-color: #7453fc;
+    }
+
+    .cta-button.game:hover {
+    background-color: #371e9b;
+    }
+
+    .periodic-table {
+    text-align: center;
+    }
+
+    .periodic-table img {
+    max-width: 100%;
+    height: auto;
+    border: 1px solid #7453fc;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    
+  </style>
+</head>
+<body>
+  <header>
+    <h1 class="logo">LabMentor Kit</h1>
+    <nav class="navigation">
+      <a href="index.html" class="active">Home</a>
+      <a href="cell-counter.html">Cell Counter</a>
+      <a href="calculations.html">Calculations</a>
+      <a href="periodic_table.html">Periodic Table</a>
+      <a href="https://about.labxchange.org/types/virtual-lab-simulations" target="_blank">Virtual Lab</a>
+    </nav>
+  </header>
+
+  <div class="cta-box">
+    <div class="cta-content">
+      <h1>Periodic Table</h1>
+      <div class="button-container">
+        <button class="cta-button" onclick="window.location.href='https://pubchem.ncbi.nlm.nih.gov/periodic-table/#view=table'">See Full HD Periodic Image</button>
+        <button class="cta-button game" onclick="window.location.href='https://pubchem.ncbi.nlm.nih.gov/periodic-table/#view=game'">Challenge Yourself</button>
+      </div>
+      <div class="periodic-table">
+        <img src="Periodic_Table.png" alt="Periodic Table">
+      </div>
+    </div>
+  </div>
+</body>
+</html>

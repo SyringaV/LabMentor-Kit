@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LabMentor Kit - Molarity Calculator</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+   
+    .cta-box {
+        text-align: center;
+        margin: 100px auto 20px;
+        max-width: 1000px;
+        padding: 20px;
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    }
+    .cta-content h1 {
+        font-size: 1.8em;
+        margin-bottom: 10px;
+    }
+    .cta-content p {
+        font-size: 1.2em;
+        margin-bottom: 20px;
+        color: #666;
+    }
+    .form-group {
+        margin-bottom: 1rem;
+    }
+    .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: bold;
+    }
+    .form-group textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+        font-size: 1em;
+    }
+    
+    .result {
+        margin-top: 20px;
+        padding: 15px;
+        border: 1px solid #7453fc;
+        border-radius: 5px;
+        background-color: #e6f7ff;
+        min-height: 50px;
+        text-align: center;
+        font-weight: bold;
+    }
+    </style>
+</head>
+<body>
+  <header>
+    <h1 class="logo">LabMentor Kit</h1>
+    <nav class="navigation">
+        <a href="index.html" class="active">Home</a>
+        <a href="cell-counter.html">Cell Counter</a>
+        <a href="calculations.html">Calculations</a>
+        <a href="periodic_table.html">Periodic Table</a>
+        <a href="https://about.labxchange.org/types/virtual-lab-simulations" target="_blank">Virtual Lab</a>
+    </nav>
+  </header>
+
+    <div class="cta-box">
+        <div class="cta-content">
+            <h1>Molecular Weight Calculator</h1>
+            <p>Calculate the molecular weight of a compound given its chemical formula.</p>
+            <div class="form-group">
+                <label for="chemicalFormula">Chemical Formula:</label>
+                <textarea id="chemicalFormula" placeholder="Enter the chemical formula (e.g., H2O, C6H12O6)"></textarea>
+            </div>
+            <button class="cta-button" onclick="calculateMolecularWeight()">Calculate</button>
+            <div class="result" id="result"></div>
+        </div>
+    </div>
+
+    <script>
+        // Atomic weights in atomic mass units (amu)
+        const atomicWeights = {
+            H: 1.008, He: 4.0026, Li: 6.94, Be: 9.0122, B: 10.81, C: 12.01, N: 14.01, O: 15.999, F: 18.998, Ne: 20.180,
+            Na: 22.990, Mg: 24.305, Al: 26.982, Si: 28.085, P: 30.974, S: 32.06, Cl: 35.45, Ar: 39.948, K: 39.098, Ca: 40.078,
+            Sc: 44.956, Ti: 47.867, V: 50.942, Cr: 51.996, Mn: 54.938, Fe: 55.845, Co: 58.933, Ni: 58.933, Cu: 63.546, Zn: 65.38,
+            Ga: 69.723, Ge: 72.630, As: 74.922, Se: 78.971, Br: 79.904, Kr: 83.798, Rb: 85.468, Sr: 87.62, Y: 88.906, Zr: 91.224,
+            Nb: 92.906, Mo: 95.95, Tc: 98, Ru: 101.07, Rh: 102.91, Pd: 106.42, Ag: 107.87, Cd: 112.41, In: 114.82, Sn: 118.71, Sb: 121.76,
+            Te: 127.60, I: 126.90, Xe: 131.29, Cs: 132.91, Ba: 137.33, La: 138.91, Ce: 140.12, Pr: 140.91, Nd: 144.24, Pm: 145, Sm: 150.36,
+            Eu: 151.96, Gd: 157.25, Tb: 158.93, Dy: 162.50, Ho: 164.93, Er: 167.26, Tm: 168.93, Yb: 173.04, Lu: 174.97, Hf: 178.49, Ta: 180.95,
+            W: 183.84, Re: 186.21, Os: 190.23, Ir: 192.22, Pt: 195.08, Au: 196.97, Hg: 200.59, Tl: 204.38, Pb: 207.2, Bi: 208.98, Th: 232.04,
+            U: 238.03
+        };
+
+        function calculateMolecularWeight() {
+            const formula = document.getElementById('chemicalFormula').value.trim();
+            const resultDiv = document.getElementById('result');
+            if (formula === '') {
+                resultDiv.textContent = 'Please enter a chemical formula.';
+                return;
+            }
+
+            let totalWeight = 0;
+            const regex = /([A-Z][a-z]*)(\d*)/g;
+            let match;
+            while ((match = regex.exec(formula)) !== null) {
+                const element = match[1];
+                const quantity = parseInt(match[2], 10) || 1;
+
+                if (atomicWeights[element]) {
+                    totalWeight += atomicWeights[element] * quantity;
+                } else {
+                    resultDiv.textContent = `Element ${element} not recognized.`;
+                    return;
+                }
+            }
+
+            resultDiv.textContent = `Molecular Weight: ${totalWeight.toFixed(2)} g/mol`;
+        }
+    </script>
+</body>
+</html>

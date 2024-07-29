@@ -1,0 +1,579 @@
+/* Import the Poppins font from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+
+/* Apply the Poppins font to elements */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins' , sans-serif;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: url('background-1.jpg') no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-color: #f8f8f8;
+
+}
+
+
+
+header{
+  background-color: #333;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 20px 100px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 100;
+}
+
+
+
+.logo {
+  font-size: 2em;
+  color: #fff;
+  user-select: none;
+}
+
+.navigation a {
+  position: relative;
+  font-size: 18px;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+  margin-left: 40px;
+}
+
+.navigation a:after{
+  content: '';
+  position:absolute;
+  left: 0;
+  bottom: -6px;
+  width: 100%;
+  height: 3px;
+  background: #fff;
+  border-radius: 5px;
+  transform-origin: right;
+  transform: scaleX(0);
+  transition: transform .5s;
+}
+
+.navigation a:hover::after{
+  transform-origin: left;
+  transform: scaleX(1);
+
+
+
+}
+
+/* the home page beginning */
+section{padding: 2rem 9%;}
+
+.btn{
+  display:inline-block;
+  margin-top: 1rem;
+  border-radius: 5rem;
+  background: #333;
+  color: #fff;
+  padding: .9rem 3.5rem;
+  cursor: pointer;
+  font-size: 1.7rem;
+}
+
+.btn:hover{
+  background: var(#162938);
+}
+
+.home{display: flex;
+align-items: center;
+min-height: 100vh;
+background: url(background-1.jpg) no-repeat;
+background-size: cover;
+background-position: center;
+}
+
+.home .content{
+  max-width: 50rem;
+}
+
+.home .content h3{
+  font-size: 6rem;
+  color: #333;
+}
+
+.home .content span{
+  font-size: 3.5rem;
+  color: #162938;
+  padding: 1rem 0;
+  line-height: 1.5;
+}
+
+.home .content p{
+  font-size: 1.5rem;
+  color: #162938;
+  padding: 1rem 0;
+  line-height: 1.5;
+}
+
+
+.container {
+  display: flex;
+  flex-direction: column; /* Align items in a column */
+  align-items: center; /* Center items horizontally */
+  min-height: 100vh;
+}
+
+.cta-box {
+  background-color: #f8f9fa;
+  border-radius: 20px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  margin-top: 100px;
+  padding: 60px; /* Increased padding for larger cta-box */
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap; /* Allow content to wrap within the box */
+}
+
+.cta-content {
+  flex: 1;
+  text-align: center;
+  margin-right: 20px; 
+}
+
+.cta-image {
+  max-width: 200px;
+}
+
+.cta-button {
+  background-color: #7453fc;
+  color: #fff;
+  padding: 15px 30px; /* Increased padding for larger buttons */
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 30px; 
+  font-size: 1.2em; /* Increased font size for buttons */
+}
+
+.cta-button:hover {
+  background-color: #371e9b;
+}
+
+/* Outside buttons styles */
+.outside-buttons {
+  margin-top: 40px; /* Adjust margin-top here */
+  display: flex;
+  justify-content: center;
+}
+
+.outside-buttons .cta-button {
+  background-color: #7453fc;
+  color: #fff;
+  padding: 10px 20px;
+  margin: 0 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.outside-buttons .cta-button:hover {
+  background-color: #371e9b;
+}
+
+
+
+/* The hemocytometer page*/
+
+.image-container {
+  border: 2px solid #f0f0f0;
+  width: 350px;
+  height: 350px;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px; /* Add some spacing between the image container and controls */
+  border-radius: 10px; /* Rounded corners for a modern look */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  background-color: #fff; /* White background */
+ 
+}
+
+.image-container img {
+  display: block;
+  width: 100%;
+  height: auto;
+  transform-origin: center center;
+  transition: transform 0.5s ease;
+}
+
+.controls-container {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+}
+
+.controls-container button {
+  background-color: #7453fc;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s transform 0.3s;;
+  margin: 0 5px;
+  font-size: 1em; /* Set a consistent font size */
+  text-transform: uppercase; /* Uppercase button text */
+}
+
+
+.controls-container button:hover {
+  background-color: #371e9b;
+  transform: scale(1.05); /* Scale up on hover for a subtle interactive effect */
+}
+
+.right-side {
+  margin-left: 20px; /* Adjust margin as needed */
+  height: 600px; /* Fixed height to prevent content from pushing the image */
+  background-color: #f9f9f9; /* Light gray background */
+  margin-top: 90px;
+  border-radius: 10px; /* Rounded corners */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); /* Soft shadow */  
+}
+
+.right-side h2 {
+  font-size: 2em;
+  color: #333;
+  margin-bottom: 20px; /* Add margin bottom */
+}
+
+
+
+/* Table Styling */
+.cell-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  font-family: 'Poppins', sans-serif;
+}
+
+.cell-table th,
+.cell-table td {
+  padding: 12px;
+  border: 1px solid #ccc;
+  text-align: center;
+}
+
+.cell-table th {
+  background-color: #f8f9fa;
+  font-weight: bold;
+}
+
+.cell-table tr {
+  background-color: #ffffff;
+}
+
+.cell-table tr:hover {
+  background-color: #f0f0f0;
+  transition: background-color 0.3s; /* Smooth transition for hover effect */
+}
+
+/* Differentiation for Specific Rows */
+.cell-category {
+  background-color: #f3f3f3;
+  font-weight: bold;
+}
+
+
+/* Input Field Styling */
+.cell-table input[type='number'] {
+  width: 80px;
+  padding: 10px;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  transition: border-color 0.3s; /* Smooth transition for input focus */
+}
+
+.cell-table input[type='number']:focus {
+  outline: none;
+  border-color: #7453fc;
+}
+
+/*calculation*/
+
+.calculations {
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  padding: 20px;
+  margin-top: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.calculations h3 {
+  font-size: 1.8em;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.dilution-options {
+  margin-bottom: 20px;
+}
+
+.dilution-options label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.dilution-options input[type='number'] {
+  width: 150px;
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  margin-bottom: 10px;
+}
+
+.calculations p {
+  font-size: 1.1em;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.calculations span {
+  font-weight: bold;
+  color: #7453fc; /* Green color for emphasis */
+}
+
+/* something*/
+
+.counting-options {
+  display: flex;
+  align-items: center;
+  margin-top: 25px;
+  margin-bottom: 10px;
+  justify-content: center;
+}
+
+.counting-options label {
+  font-size: 1.2em; /* Increase font size for better readability */
+  margin-right: 20px; /* Add more spacing between labels */
+  color: #333; /* Set text color to a darker shade */
+  font-weight: bold;
+}
+
+
+.counting-options .square-label {
+  color: #7453fc; /* Set a green color for emphasis */
+  font-weight: bold; /* Make the text bold for emphasis */
+}
+
+.radio-buttons {
+  display: flex;
+  align-items: center;
+}
+
+.radio-buttons input[type="radio"] {
+  display: none;
+}
+
+.radio-buttons label {
+  display: inline-block;
+  background-color: #f8f9fa;
+  color: #333;
+  font-size: 1em;
+  font-weight: bold;
+  padding: 10px 15px; /* Increase padding for a larger clickable area */
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 10px; /* Add spacing between radio buttons */
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.radio-buttons input[type="radio"]:checked + label {
+  background-color: #7453fc;
+  color: #fff;
+}
+
+
+
+/*education resource*/
+/* style.css */
+
+.container-er {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  margin-top: 100px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Introduction Styles */
+.introduction-er {
+  margin-bottom: 20px;
+}
+
+/* Button Styles */
+.button-er {
+  display: block;
+  width: 100%;
+  padding: 15px;
+  margin-bottom: 10px;
+  background-color: #7453fc;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.button-er:hover {
+  background-color: #371e9b;
+}
+
+/* Content Styles */
+.content-er {
+  display: none;
+  padding: 20px;
+  background-color: #f5f5f5;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+.content-er.active {
+  display: block;
+}
+
+/* Heading Styles */
+.content-er h3 {
+  margin-top: 0;
+  color: #162938;
+}
+
+/* Text Styles */
+h2, h3 {
+  color: #162938;
+}
+
+p, ul, li {
+  color: #333;
+}
+
+
+ul{
+  padding-left: 25px; /* Adjust as needed */
+}
+
+/* Responsive Layout */
+@media (max-width: 768px) {
+  .container-er {
+    padding: 10px;
+  }
+}
+
+
+.container-htu {
+  margin-top: 500 px;
+  max-width: 800px;
+  margin-top: 100px;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  color: #162938;
+}
+
+ol {
+  list-style-type: decimal;
+  padding-left: 20px;
+}
+
+li {
+  margin-bottom: 10px;
+}
+
+strong {
+  color: #7453fc;
+}
+
+
+/* Calculator page*/
+.button-container-cm {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 50px;
+}
+
+.calculation-button-cm {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 250px;
+  height: 80px;
+  background-color: #fff;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  margin: 20px;
+  text-decoration: none;
+  color: #333;
+  transition: all 0.3s ease;
+}
+
+.calculation-button-cm:hover {
+  background-color: #f0f0f0;
+  transform: translateY(-5px);
+}
+
+.calculation-button-cm img {
+  width: 40px;
+  margin-right: 20px;
+}
+
+.calculation-button-cm span {
+  font-size: 1.2em;
+}
+
+
+footer {
+  background: rgb(125,90,254);
+  background: linear-gradient(132deg, rgba(125,90,254,1) 25%, rgba(160,84,244,1) 100%);
+  text-align: center;
+  padding: 25px 0px;
+}
+
+footer p {
+  color: #fff;
+}
+
+footer p a {
+  color: #fff;
+  font-weight: 500;
+  transition: all .3s;
+}
+
+footer p a:hover {
+  color: #fff;
+  opacity: 0.75;
+}
+
+
+

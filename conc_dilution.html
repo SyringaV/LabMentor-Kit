@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LabMentor Kit - Concentration Dilution Calculator</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+
+    .cta-box {
+      text-align: center;
+      margin: 100px auto 20px; /* Increased top margin for better visibility */
+      max-width: 800px;
+      padding: 20px;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .cta-content h1 {
+      font-size: 1.8em;
+      margin-bottom: 10px;
+    }
+
+    .cta-content p {
+      font-size: 1.2em;
+      margin-bottom: 20px;
+      color: #666;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .form-group label {
+      flex: 1;
+      font-weight: bold;
+      text-align: right;
+      margin-right: 10px;
+    }
+
+    .form-group input,
+    .form-group select {
+      flex: 2;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+      font-size: 1em;
+    }
+
+    
+
+    .result-container {
+      margin-top: 20px;
+    }
+
+    .result {
+      padding: 15px;
+      border: 1px solid #0073e6;
+      border-radius: 5px;
+      background-color: #e6f7ff;
+      min-height: 50px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .result-conversion {
+      margin-top: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .result-conversion label {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .result-conversion select {
+      padding: 5px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1 class="logo">LabMentor Kit</h1>
+    <nav class="navigation">
+      <a href="index.html" class="active">Home</a>
+      <a href="cell-counter.html">Cell Counter</a>
+      <a href="calculations.html">Calculations</a>
+      <a href="periodic_table.html">Periodic Table</a>
+      <a href="https://about.labxchange.org/types/virtual-lab-simulations" target="_blank">Virtual Lab</a>
+    </nav>
+  </header>
+
+  <div class="cta-box">
+    <div class="cta-content">
+      <h1>Concentration Dilution Calculator</h1>
+      <p>Calculate the concentration of a solution after dilution.</p>
+      <div class="form-group">
+        <label for="initial-concentration">Initial Concentration:</label>
+        <input type="number" id="initial-concentration" placeholder="Enter initial concentration (e.g., 1.0)" step="any" required>
+        <select id="initial-concentration-unit" name="initial-concentration-unit">
+          <option value="M" selected>Molar (M)</option>
+          <option value="mM">Millimolar (mM)</option>
+          <option value="μM">Micromolar (μM)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="initial-volume">Initial Volume:</label>
+        <input type="number" id="initial-volume" placeholder="Enter initial volume (e.g., 100)" step="any" required>
+        <select id="initial-volume-unit" name="initial-volume-unit">
+          <option value="L" selected>Liters (L)</option>
+          <option value="mL">Milliliters (mL)</option>
+          <option value="μL">Microliters (μL)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="final-volume">Final Volume:</label>
+        <input type="number" id="final-volume" placeholder="Enter final volume (e.g., 500)" step="any" required>
+        <select id="final-volume-unit" name="final-volume-unit">
+          <option value="L" selected>Liters (L)</option>
+          <option value="mL">Milliliters (mL)</option>
+          <option value="μL">Microliters (μL)</option>
+        </select>
+      </div>
+      <button class="cta-button" onclick="calculateConcentration()">Calculate</button>
+      <div class="result-container">
+        <div class="result" id="result">
+          <p id="result-text"></p>
+        </div>
+        <div class="result-conversion" id="result-conversion" style="display:none;">
+          <label for="result-unit">Convert Result to:</label>
+          <select id="result-unit" name="result-unit" onchange="convertResult()">
+            <option value="M">Molar (M)</option>
+            <option value="mM">Millimolar (mM)</option>
+            <option value="μM">Micromolar (μM)</option>
+          </select>
+          <p id="converted-result"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function calculateConcentration() {
+      const initialConcentration = parseFloat(document.getElementById('initial-concentration').value);
+      const initialConcentrationUnit = document.getElementById('initial-concentration-unit').value;
+      const initialVolume = parseFloat(document.getElementById('initial-volume').value);
+      const initialVolumeUnit = document.getElementById('initial-volume-unit').value;
+      const finalVolume = parseFloat(document.getElementById('final-volume').value);
+      const finalVolumeUnit = document.getElementById('final-volume-unit').value;
+
+      // Conversion factors
+      const concentrationConversions = {
+        'M': 1,
+        'mM': 0.001,
+        'μM': 0.000001
+      };
+
+      const volumeConversions = {
+        'L': 1,
+        'mL': 0.001,
+        'μL': 0.000001
+      };
+
+      if (isNaN(initialConcentration) || isNaN(initialVolume) || isNaN(finalVolume) ||
+          initialConcentration <= 0 || initialVolume <= 0 || finalVolume <= 0) {
+        document.getElementById('result-text').textContent = 'Please enter valid, positive numbers for all fields.';
+        document.getElementById('result-conversion').style.display = 'none';
+        return;
+      }
+
+      // Convert initial concentration to Molarity and volumes to liters
+      const initialConcentrationInMolar = initialConcentration * concentrationConversions[initialConcentrationUnit];
+      const initialVolumeInLiters = initialVolume * volumeConversions[initialVolumeUnit];
+      const finalVolumeInLiters = finalVolume * volumeConversions[finalVolumeUnit];
+
+      // Calculate final concentration
+      const finalConcentration = (initialConcentrationInMolar * initialVolumeInLiters) / finalVolumeInLiters;
+
+      // Display result
+      document.getElementById('result-text').textContent = `The final concentration is ${finalConcentration.toFixed(2)} M`;
+
+      // Show conversion options
+      document.getElementById('result-conversion').style.display = 'flex';
+
+      // Store result in global variable for conversion
+      window.finalConcentration = finalConcentration;
+    }
+
+    function convertResult() {
+      const conversionUnit = document.getElementById('result-unit').value;
+      const conversionFactors = {
+        'M': 1,
+        'mM': 1000,
+        'μM': 1000000
+      };
+
+      if (window.finalConcentration !== undefined) {
+        const convertedConcentration = window.finalConcentration * conversionFactors[conversionUnit];
+        document.getElementById('converted-result').textContent = `Converted result: ${convertedConcentration.toFixed(2)} ${conversionUnit}`;
+      }
+    }
+  </script>
+</body>
+</html>

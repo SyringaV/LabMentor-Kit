@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LabMentor Kit - Unit Converter</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+ 
+    .cta-box {
+      text-align: center;
+      margin: 80px auto;
+      max-width: 1000px;
+      padding: 20px;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .cta-content h1 {
+      font-size: 1.8em;
+      margin-bottom: 10px;
+    }
+
+    .cta-content p {
+      font-size: 1.2em;
+      margin-bottom: 20px;
+      color: #666;
+    }
+
+    .converter-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .converter-buttons button {
+      padding: 12px 20px;
+      background-color: #7453fc;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .converter-buttons button:hover {
+      background-color: #371e9b;
+    }
+
+    .popup {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .popup-content {
+      background-color: white;
+      border-radius: 8px;
+      padding: 20px;
+      width: 80%;
+      max-width: 600px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      position: relative;
+    }
+
+    .popup-content button.close {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: none;
+      border: none;
+      font-size: 1.5em;
+      cursor: pointer;
+    }
+
+    .popup-content label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+
+    .popup-content select,
+    .popup-content input {
+      width: calc(100% - 20px);
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+      margin-bottom: 10px;
+    }
+
+    .popup-content .result {
+      margin-top: 20px;
+      padding: 10px;
+      border: 1px solid #7453fc;
+      border-radius: 5px;
+      background-color: #e6f7ff;
+      text-align: center;
+    }
+
+    .error-message {
+      color: red;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1 class="logo">LabMentor Kit</h1>
+    <nav class="navigation">
+      <a href="index.html" class="active">Home</a>
+      <a href="cell-counter.html">Cell Counter</a>
+      <a href="calculations.html">Calculations</a>
+      <a href="periodic_table.html">Periodic Table</a>
+      <a href="https://about.labxchange.org/types/virtual-lab-simulations" target="_blank">Virtual Lab</a>
+    </nav>
+  </header>
+
+  <div class="cta-box">
+    <div class="cta-content">
+      <h1>Unit Converter</h1>
+      <p>Choose a category to start converting units.</p>
+      <div class="converter-buttons">
+        <button onclick="openPopup('mass-popup')">Mass</button>
+        <button onclick="openPopup('volume-popup')">Volume</button>
+        <button onclick="openPopup('concentration-popup')">Concentration</button>
+        <button onclick="openPopup('length-popup')">Length</button>
+        <button onclick="openPopup('temperature-popup')">Temperature</button>
+        <button onclick="openPopup('pressure-popup')">Pressure</button>
+        <button onclick="openPopup('time-popup')">Time</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mass Converter Popup -->
+  <div id="mass-popup" class="popup">
+    <div class="popup-content">
+      <button class="close" onclick="closePopup('mass-popup')">&times;</button>
+      <label for="mass-original">Original Value:</label>
+      <input type="number" id="mass-original" oninput="convertMass()">
+      <label for="mass-original-unit">From Unit:</label>
+      <select id="mass-original-unit" onchange="convertMass()">
+        <option value="mg">Milligrams (mg)</option>
+        <option value="g">Grams (g)</option>
+        <option value="kg">Kilograms (kg)</option>
+        <option value="μg">Micrograms (μg)</option>
+      </select>
+      <label for="mass-result-unit">Convert to:</label>
+      <select id="mass-result-unit" onchange="convertMass()">
+        <option value="mg">Milligrams (mg)</option>
+        <option value="g">Grams (g)</option>
+        <option value="kg">Kilograms (kg)</option>
+        <option value="μg">Micrograms (μg)</option>
+      </select>
+      <div class="result" id="mass-result"></div>
+      <div id="mass-error" class="error-message"></div>
+    </div>
+  </div>
+
+  <!-- Volume Converter Popup -->
+  <div id="volume-popup" class="popup">
+    <div class="popup-content">
+      <button class="close" onclick="closePopup('volume-popup')">&times;</button>
+      <label for="volume-original">Original Value:</label>
+      <input type="number" id="volume-original" oninput="convertVolume()">
+      <label for="volume-original-unit">From Unit:</label>
+      <select id="volume-original-unit" onchange="convertVolume()">
+        <option value="μL">Microliters (μL)</option>
+        <option value="mL">Milliliters (mL)</option>
+        <option value="L">Liters (L)</option>
+      </select>
+      <label for="volume-result-unit">Convert to:</label>
+      <select id="volume-result-unit" onchange="convertVolume()">
+        <option value="μL">Microliters (μL)</option>
+        <option value="mL">Milliliters (mL)</option>
+        <option value="L">Liters (L)</option>
+      </select>
+      <div class="result" id="volume-result"></div>
+      <div id="volume-error" class="error-message"></div>
+    </div>
+  </div>
+
+  <!-- Concentration Converter Popup -->
+  <div id="concentration-popup" class="popup">
+    <div class="popup-content">
+      <button class="close" onclick="closePopup('concentration-popup')">&times;</button>
+      <label for="concentration-original">Original Value:</label>
+      <input type="number" id="concentration-original" oninput="convertConcentration()">
+      <label for="concentration-original-unit">From Unit:</label>
+      <select id="concentration-original-unit" onchange="convertConcentration()">
+        <option value="M">Molar (M)</option>
+        <option value="mM">Millimolar (mM)</option>
+        <option value="μM">Micromolar (μM)</option>
+        <option value="nM">Nanomolar (nM)</option>
+      </select>
+      <label for="concentration-result-unit">Convert to:</label>
+      <select id="concentration-result-unit" onchange="convertConcentration()">
+        <option value="M">Molar (M)</option>
+        <option value="mM">Millimolar (mM)</option>
+        <option value="μM">Micromolar (μM)</option>
+        <option value="nM">Nanomolar (nM)</option>
+      </select>
+      <div class="result" id="concentration-result"></div>
+      <div id="concentration-error" class="error-message"></div>
+    </div>
+  </div>
+
+  <!-- Length Converter Popup -->
+  <div id="length-popup" class="popup">
+    <div class="popup-content">
+      <button class="close" onclick="closePopup('length-popup')">&times;</button>
+      <label for="length-original">Original Value:</label>
+      <input type="number" id="length-original" oninput="convertLength()">
+      <label for="length-original-unit">From Unit:</label>
+      <select id="length-original-unit" onchange="convertLength()">
+        <option value="mm">Millimeters (mm)</option>
+        <option value="cm">Centimeters (cm)</option>
+        <option value="m">Meters (m)</option>
+        <option value="km">Kilometers (km)</option>
+      </select>
+      <label for="length-result-unit">Convert to:</label>
+      <select id="length-result-unit" onchange="convertLength()">
+        <option value="mm">Millimeters (mm)</option>
+        <option value="cm">Centimeters (cm)</option>
+        <option value="m">Meters (m)</option>
+        <option value="km">Kilometers (km)</option>
+      </select>
+      <div class="result" id="length-result"></div>
+      <div id="length-error" class="error-message"></div>
+    </div>
+  </div>
+
+  <!-- Temperature Converter Popup -->
+  <div id="temperature-popup" class="popup">
+    <div class="popup-content">
+      <button class="close" onclick="closePopup('temperature-popup')">&times;</button>
+      <label for="temperature-original">Original Value:</label>
+      <input type="number" id="temperature-original" oninput="convertTemperature()">
+      <label for="temperature-original-unit">From Unit:</label>
+      <select id="temperature-original-unit" onchange="convertTemperature()">
+        <option value="C">Celsius (°C)</option>
+        <option value="F">Fahrenheit (°F)</option>
+        <option value="K">Kelvin (K)</option>
+      </select>
+      <label for="temperature-result-unit">Convert to:</label>
+      <select id="temperature-result-unit" onchange="convertTemperature()">
+        <option value="C">Celsius (°C)</option>
+        <option value="F">Fahrenheit (°F)</option>
+        <option value="K">Kelvin (K)</option>
+      </select>
+      <div class="result" id="temperature-result"></div>
+      <div id="temperature-error" class="error-message"></div>
+    </div>
+  </div>
+
+  <!-- Pressure Converter Popup -->
+  <div id="pressure-popup" class="popup">
+    <div class="popup-content">
+      <button class="close" onclick="closePopup('pressure-popup')">&times;</button>
+      <label for="pressure-original">Original Value:</label>
+      <input type="number" id="pressure-original" oninput="convertPressure()">
+      <label for="pressure-original-unit">From Unit:</label>
+      <select id="pressure-original-unit" onchange="convertPressure()">
+        <option value="Pa">Pascals (Pa)</option>
+        <option value="kPa">Kilopascals (kPa)</option>
+        <option value="atm">Atmospheres (atm)</option>
+        <option value="bar">Bars (bar)</option>
+        <option value="mmHg">Millimeters of Mercury (mmHg)</option>
+      </select>
+      <label for="pressure-result-unit">Convert to:</label>
+      <select id="pressure-result-unit" onchange="convertPressure()">
+        <option value="Pa">Pascals (Pa)</option>
+        <option value="kPa">Kilopascals (kPa)</option>
+        <option value="atm">Atmospheres (atm)</option>
+        <option value="bar">Bars (bar)</option>
+        <option value="mmHg">Millimeters of Mercury (mmHg)</option>
+      </select>
+      <div class="result" id="pressure-result"></div>
+      <div id="pressure-error" class="error-message"></div>
+    </div>
+  </div>
+
+  <!-- Time Converter Popup -->
+  <div id="time-popup" class="popup">
+    <div class="popup-content">
+      <button class="close" onclick="closePopup('time-popup')">&times;</button>
+      <label for="time-original">Original Value:</label>
+      <input type="number" id="time-original" oninput="convertTime()">
+      <label for="time-original-unit">From Unit:</label>
+      <select id="time-original-unit" onchange="convertTime()">
+        <option value="s">Seconds (s)</option>
+        <option value="min">Minutes (min)</option>
+        <option value="h">Hours (h)</option>
+        <option value="d">Days (d)</option>
+      </select>
+      <label for="time-result-unit">Convert to:</label>
+      <select id="time-result-unit" onchange="convertTime()">
+        <option value="s">Seconds (s)</option>
+        <option value="min">Minutes (min)</option>
+        <option value="h">Hours (h)</option>
+        <option value="d">Days (d)</option>
+      </select>
+      <div class="result" id="time-result"></div>
+      <div id="time-error" class="error-message"></div>
+    </div>
+  </div>
+
+  <script>
+    // Function to open the popup
+    function openPopup(popupId) {
+      document.getElementById(popupId).style.display = 'flex';
+    }
+
+    // Function to close the popup
+    function closePopup(popupId) {
+      document.getElementById(popupId).style.display = 'none';
+    }
+
+    // Conversion functions
+    function convertMass() {
+      const originalValue = parseFloat(document.getElementById('mass-original').value);
+      const originalUnit = document.getElementById('mass-original-unit').value;
+      const resultUnit = document.getElementById('mass-result-unit').value;
+      const resultElement = document.getElementById('mass-result');
+      const errorElement = document.getElementById('mass-error');
+
+      if (isNaN(originalValue)) {
+        errorElement.textContent = 'Please enter a valid number.';
+        resultElement.textContent = '';
+        return;
+      }
+
+      errorElement.textContent = '';
+      let result;
+
+      // Conversion logic for mass units
+      const conversionRates = {
+        mg: { mg: 1, g: 0.001, kg: 1e-6, μg: 1000 },
+        g: { mg: 1000, g: 1, kg: 0.001, μg: 1e6 },
+        kg: { mg: 1e6, g: 1000, kg: 1, μg: 1e9 },
+        μg: { mg: 0.001, g: 1e-6, kg: 1e-9, μg: 1 }
+      };
+
+      result = originalValue * conversionRates[originalUnit][resultUnit];
+      resultElement.textContent = `${originalValue} ${originalUnit} = ${result} ${resultUnit}`;
+    }
+
+    function convertVolume() {
+      const originalValue = parseFloat(document.getElementById('volume-original').value);
+      const originalUnit = document.getElementById('volume-original-unit').value;
+      const resultUnit = document.getElementById('volume-result-unit').value;
+      const resultElement = document.getElementById('volume-result');
+      const errorElement = document.getElementById('volume-error');
+
+      if (isNaN(originalValue)) {
+        errorElement.textContent = 'Please enter a valid number.';
+        resultElement.textContent = '';
+        return;
+      }
+
+      errorElement.textContent = '';
+      let result;
+
+      // Conversion logic for volume units
+      const conversionRates = {
+        μL: { μL: 1, mL: 0.001, L: 1e-6 },
+        mL: { μL: 1000, mL: 1, L: 0.001 },
+        L: { μL: 1e6, mL: 1000, L: 1 }
+      };
+
+      result = originalValue * conversionRates[originalUnit][resultUnit];
+      resultElement.textContent = `${originalValue} ${originalUnit} = ${result} ${resultUnit}`;
+    }
+
+    function convertConcentration() {
+      const originalValue = parseFloat(document.getElementById('concentration-original').value);
+      const originalUnit = document.getElementById('concentration-original-unit').value;
+      const resultUnit = document.getElementById('concentration-result-unit').value;
+      const resultElement = document.getElementById('concentration-result');
+      const errorElement = document.getElementById('concentration-error');
+
+      if (isNaN(originalValue)) {
+        errorElement.textContent = 'Please enter a valid number.';
+        resultElement.textContent = '';
+        return;
+      }
+
+      errorElement.textContent = '';
+      let result;
+
+      // Conversion logic for concentration units
+      const conversionRates = {
+        M: { M: 1, mM: 1000, μM: 1e6, nM: 1e9 },
+        mM: { M: 0.001, mM: 1, μM: 1000, nM: 1e6 },
+        μM: { M: 1e-6, mM: 0.001, μM: 1, nM: 1000 },
+        nM: { M: 1e-9, mM: 1e-6, μM: 0.001, nM: 1 }
+      };
+
+      result = originalValue * conversionRates[originalUnit][resultUnit];
+      resultElement.textContent = `${originalValue} ${originalUnit} = ${result} ${resultUnit}`;
+    }
+
+    function convertLength() {
+      const originalValue = parseFloat(document.getElementById('length-original').value);
+      const originalUnit = document.getElementById('length-original-unit').value;
+      const resultUnit = document.getElementById('length-result-unit').value;
+      const resultElement = document.getElementById('length-result');
+      const errorElement = document.getElementById('length-error');
+
+      if (isNaN(originalValue)) {
+        errorElement.textContent = 'Please enter a valid number.';
+        resultElement.textContent = '';
+        return;
+      }
+
+      errorElement.textContent = '';
+      let result;
+
+      // Conversion logic for length units
+      const conversionRates = {
+        mm: { mm: 1, cm: 0.1, m: 0.001, km: 1e-6 },
+        cm: { mm: 10, cm: 1, m: 0.01, km: 1e-5 },
+        m: { mm: 1000, cm: 100, m: 1, km: 0.001 },
+        km: { mm: 1e6, cm: 1e5, m: 1000, km: 1 }
+      };
+
+      result = originalValue * conversionRates[originalUnit][resultUnit];
+      resultElement.textContent = `${originalValue} ${originalUnit} = ${result} ${resultUnit}`;
+    }
+
+    function convertTemperature() {
+      const originalValue = parseFloat(document.getElementById('temperature-original').value);
+      const originalUnit = document.getElementById('temperature-original-unit').value;
+      const resultUnit = document.getElementById('temperature-result-unit').value;
+      const resultElement = document.getElementById('temperature-result');
+      const errorElement = document.getElementById('temperature-error');
+
+      if (isNaN(originalValue)) {
+        errorElement.textContent = 'Please enter a valid number.';
+        resultElement.textContent = '';
+        return;
+      }
+
+      errorElement.textContent = '';
+      let result;
+
+      // Conversion logic for temperature units
+      if (originalUnit === 'C') {
+        if (resultUnit === 'C') result = originalValue;
+        if (resultUnit === 'F') result = (originalValue * 9/5) + 32;
+        if (resultUnit === 'K') result = originalValue + 273.15;
+      }
+      if (originalUnit === 'F') {
+        if (resultUnit === 'C') result = (originalValue - 32) * 5/9;
+        if (resultUnit === 'F') result = originalValue;
+        if (resultUnit === 'K') result = (originalValue - 32) * 5/9 + 273.15;
+      }
+      if (originalUnit === 'K') {
+        if (resultUnit === 'C') result = originalValue - 273.15;
+        if (resultUnit === 'F') result = (originalValue - 273.15) * 9/5 + 32;
+        if (resultUnit === 'K') result = originalValue;
+      }
+
+      resultElement.textContent = `${originalValue} ${originalUnit} = ${result} ${resultUnit}`;
+    }
+
+    function convertPressure() {
+      const originalValue = parseFloat(document.getElementById('pressure-original').value);
+      const originalUnit = document.getElementById('pressure-original-unit').value;
+      const resultUnit = document.getElementById('pressure-result-unit').value;
+      const resultElement = document.getElementById('pressure-result');
+      const errorElement = document.getElementById('pressure-error');
+
+      if (isNaN(originalValue)) {
+        errorElement.textContent = 'Please enter a valid number.';
+        resultElement.textContent = '';
+        return;
+      }
+
+      errorElement.textContent = '';
+      let result;
+
+      // Conversion logic for pressure units
+      const conversionRates = {
+        Pa: { Pa: 1, kPa: 0.001, atm: 9.86923e-6, bar: 1e-5, mmHg: 0.00750062 },
+        kPa: { Pa: 1000, kPa: 1, atm: 0.00986923, bar: 0.01, mmHg: 7.50062 },
+        atm: { Pa: 101325, kPa: 101.325, atm: 1, bar: 1.01325, mmHg: 760 },
+        bar: { Pa: 100000, kPa: 100, atm: 0.986923, bar: 1, mmHg: 750.062 },
+        mmHg: { Pa: 133.322, kPa: 0.133322, atm: 0.00131579, bar: 0.00133322, mmHg: 1 }
+      };
+
+      result = originalValue * conversionRates[originalUnit][resultUnit];
+      resultElement.textContent = `${originalValue} ${originalUnit} = ${result} ${resultUnit}`;
+    }
+
+    function convertTime() {
+      const originalValue = parseFloat(document.getElementById('time-original').value);
+      const originalUnit = document.getElementById('time-original-unit').value;
+      const resultUnit = document.getElementById('time-result-unit').value;
+      const resultElement = document.getElementById('time-result');
+      const errorElement = document.getElementById('time-error');
+
+      if (isNaN(originalValue)) {
+        errorElement.textContent = 'Please enter a valid number.';
+        resultElement.textContent = '';
+        return;
+      }
+
+      errorElement.textContent = '';
+      let result;
+
+      // Conversion logic for time units
+      const conversionRates = {
+        s: { s: 1, min: 1/60, h: 1/3600, d: 1/86400 },
+        min: { s: 60, min: 1, h: 1/60, d: 1/1440 },
+        h: { s: 3600, min: 60, h: 1, d: 1/24 },
+        d: { s: 86400, min: 1440, h: 24, d: 1 }
+      };
+
+      result = originalValue * conversionRates[originalUnit][resultUnit];
+      resultElement.textContent = `${originalValue} ${originalUnit} = ${result} ${resultUnit}`;
+    }
+  </script>
+</body>
+</html>

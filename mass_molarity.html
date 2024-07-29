@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LabMentor Kit - Mass-Molarity Calculator</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    
+    .cta-box {
+      text-align: center;
+      margin-top: 80px; /* Adjusted margin-top to ensure it doesn't touch the navigation bar */
+      max-width: 1000px; /* Increased width */
+      margin: 20px auto;
+      padding: 20px;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .cta-content h1 {
+      font-size: 1.8em;
+      margin-bottom: 10px;
+    }
+
+    .cta-content p {
+      font-size: 1.2em;
+      margin-bottom: 20px;
+      color: #666;
+    }
+
+    .calculations {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%; /* Full width */
+    }
+
+    .mass-molarity-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .mass-molarity-options label {
+      width: 100%;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .mass-molarity-options input,
+    .mass-molarity-options select {
+      width: calc(50% - 20px); /* Adjust width */
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+      text-align: center; /* Center text inside the input */
+    }
+
+    .mass-molarity-options select {
+      margin-left: 10px;
+    }
+
+    #mass-molarity-result {
+      margin-top: 20px;
+      padding: 15px;
+      border: 1px solid #7453fc;
+      border-radius: 5px;
+      background-color: #e6f7ff;
+      min-height: 50px;
+      width: 100%;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .cta-button {
+      width: 100%;
+      padding: 12px;
+      background-color: #7453fc;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      font-size: 1.1em;
+    }
+
+    .cta-button:hover {
+      background-color: #7453fc;
+    }
+
+    #result-conversion {
+      margin-top: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #result-conversion label {
+      margin-right: 10px;
+    }
+
+    #converted-result {
+      margin-top: 10px;
+      padding: 10px;
+      border: 1px solid #7453fc;
+      border-radius: 5px;
+      background-color: #e6f7ff;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1 class="logo">LabMentor Kit</h1>
+    <nav class="navigation">
+      <a href="index.html" class="active">Home</a>
+      <a href="cell-counter.html">Cell Counter</a>
+      <a href="calculations.html">Calculations</a>
+      <a href="periodic_table.html">Periodic Table</a>
+      <a href="https://about.labxchange.org/types/virtual-lab-simulations" target="_blank">Virtual Lab</a>
+    </nav>
+  </header>
+
+  <div class="cta-box" style="margin-top: 100px;">
+    <div class="calculations">
+      <h1>Mass-Molarity Calculator</h1>
+      <p>Calculate the mass of solute required to achieve a specific molarity.</p>
+      <div class="mass-molarity-options">
+        <label for="molarity">Molarity:</label>
+        <input type="number" id="molarity" name="molarity" placeholder="Enter molarity" required>
+        <select id="molarity-unit" name="molarity-unit">
+          <option value="M">Molar (M)</option>
+          <option value="mM" selected>Millimolar (mM)</option>
+          <option value="μM">Micromolar (μM)</option>
+        </select>
+        
+        <label for="volume">Volume of Solution:</label>
+        <input type="number" id="volume" name="volume" placeholder="Enter volume of solution" required>
+        <select id="volume-unit" name="volume-unit">
+          <option value="mL" selected>Milliliters (mL)</option>
+          <option value="L">Liters (L)</option>
+          <option value="μL">Microliters (μL)</option>
+        </select>
+
+        <label for="molar-mass">Molar Mass of Solute (g/mol):</label>
+        <input type="number" id="molar-mass" name="molar-mass" placeholder="Enter molar mass of solute" required>
+      </div>
+      <button class="cta-button" onclick="calculateMass()">Calculate</button>
+      <p id="mass-molarity-result"></p>
+      <div id="result-conversion">
+        <label for="result-unit">Convert Result to:</label>
+        <select id="result-unit" name="result-unit" onchange="convertResult()">
+          <option value="g" selected>Grams (g)</option>
+          <option value="mg">Milligrams (mg)</option>
+          <option value="kg">Kilograms (kg)</option>
+          <option value="μg">Micrograms (μg)</option>
+        </select>
+        <p id="converted-result"></p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function calculateMass() {
+      const molarity = parseFloat(document.getElementById('molarity').value);
+      const molarityUnit = document.getElementById('molarity-unit').value;
+      const volume = parseFloat(document.getElementById('volume').value);
+      const volumeUnit = document.getElementById('volume-unit').value;
+      const molarMass = parseFloat(document.getElementById('molar-mass').value);
+
+      // Conversion factors
+      const unitConversions = {
+        'M': 1,
+        'mM': 0.001,
+        'μM': 0.000001,
+        'L': 1,
+        'mL': 0.001,
+        'μL': 0.000001
+      };
+
+      if (isNaN(molarity) || isNaN(volume) || isNaN(molarMass) || molarity <= 0 || volume <= 0 || molarMass <= 0) {
+        document.getElementById('mass-molarity-result').textContent = 'Please enter valid, positive numbers for all fields.';
+        document.getElementById('result-conversion').style.display = 'none';
+        return;
+      }
+
+      // Convert molarity to Molar (M) and volume to Liters (L)
+      const molarityInM = molarity * unitConversions[molarityUnit];
+      const volumeInL = volume * unitConversions[volumeUnit];
+
+      // Calculate mass required (mass = molarity * volume * molar mass)
+      const massRequired = molarityInM * volumeInL * molarMass;
+
+      document.getElementById('mass-molarity-result').textContent = `You need ${massRequired.toFixed(2)} g of the solute.`;
+      document.getElementById('result-conversion').style.display = 'block';
+      convertResult();
+    }
+
+    function convertResult() {
+      const resultUnit = document.getElementById('result-unit').value;
+
+      // Conversion factors
+      const unitConversions = {
+        'g': 1,
+        'mg': 1000,
+        'kg': 0.001,
+        'μg': 1000000
+      };
+
+      const massInGrams = parseFloat(document.getElementById('mass-molarity-result').textContent.split(' ')[2]);
+      const convertedMass = massInGrams * unitConversions[resultUnit];
+
+      document.getElementById('converted-result').textContent = `This is equivalent to ${convertedMass.toFixed(2)} ${resultUnit}.`;
+    }
+  </script>
+</body>
+</html>

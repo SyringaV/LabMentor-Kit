@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LabMentor Kit - Cell Counter</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1 class="logo">LabMentor Kit</h1>
+    <nav class="navigation">
+      <a href="index.html" class="active">Home</a>
+      <a href="cell-counter.html" >Cell Counter</a>
+      <a href="calculations.html">Calculations</a>
+      <a href="periodic_table.html">Periodic Table</a>
+      <a href="https://about.labxchange.org/types/virtual-lab-simulations" target="_blank">Virtual Lab</a>
+    </nav>
+  </header>
+
+  <div class="left-side">
+    <div class="image-box">
+      <label for="image-upload">Upload Image:</label>
+      <input type="file" id="image-upload" accept="image/jpeg, image/png">
+      <div class="image-container">
+        <!-- Uploaded image will be displayed here -->
+        <img id="uploaded-image" src="#" alt="Uploaded Image">
+      </div>
+      <div class="controls-container">
+        <button id="zoom-in">Zoom In</button>
+        <button id="zoom-out">Zoom Out</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="right-side">
+    <div class="counting-options">
+      <label for="counting-option">Number of squares counted:</label>
+      <div class="radio-buttons">
+        <input type="radio" id="option-4" name="counting-option" value="4">
+        <label for="option-4">4</label>
+        <input type="radio" id="option-5" name="counting-option" value="5">
+        <label for="option-5">5</label>
+      </div>
+    </div>
+    <div id="squares-counted">
+      <div class="squares-content-wrapper">
+        <!-- Square count options will be dynamically added here -->
+      </div>
+    </div>
+    
+    <table class="cell-table">
+      <thead>
+        <tr>
+          <th>Category</th>
+          <th>Viable Cells</th>
+          <th>Non-viable Cells</th>
+        </tr>
+      </thead>
+      <tbody id="cell-counts">
+        <!-- Cell counting rows will be dynamically added here -->
+      </tbody>
+    </table>
+
+
+    
+    <div class="calculations">
+      <h3>Calculations</h3>
+      <div class="dilution-options">
+        <label for="sample-volume">Volume of original sample:</label>
+        <input type="number" id="sample-volume" name="sample-volume" min="0">
+        <label for="diluting-liquid-volume">Volume of diluting liquid used:</label>
+        <input type="number" id="diluting-liquid-volume" name="diluting-liquid-volume" min="0">
+      </div>
+      <p>Total viable cells: <span id="total-viable-cells">0</span></p>
+      <p>Total non-viable cells: <span id="total-non-viable-cells">0</span></p>
+      <p>Percentage of viable cells: <span id="percentage-viable-cells">0</span>%</p>
+      <p>Average number of viable cells per square: <span id="average-viable-cells">0</span></p>
+      <p>Dilution Factor: <span id="dilution-factor"></span></p>
+      <p>Concentration (Viable cells/mL): <span id="concentration">0</span></p>
+    </div>
+      
+  </div>
+
+<script>
+  const countingOptions = document.querySelectorAll('input[name="counting-option"]');
+  const squaresCountedContainer = document.getElementById('squares-counted');
+  const cellCountsContainer = document.getElementById('cell-counts');
+  const totalViableCells = document.getElementById('total-viable-cells');
+  const totalNonViableCells = document.getElementById('total-non-viable-cells');
+  const averageViableCells = document.getElementById('average-viable-cells');
+  const dilutionFactorOutput = document.getElementById('dilution-factor');
+  const concentrationOutput = document.getElementById('concentration');
+  const percentageViableCellsOutput = document.getElementById('percentage-viable-cells');
+  const imageUpload = document.getElementById('image-upload');
+  const uploadedImage = document.getElementById('uploaded-image');
+  const zoomInButton = document.getElementById('zoom-in');
+  const zoomOutButton = document.getElementById('zoom-out');
+
+  let scale = 1;
+  let translateX = 0;
+  let translateY = 0;
+  let startX, startY;
+  let isDragging = false;
+
+  countingOptions.forEach(option => {
+    option.addEventListener('click', () => {
+      const squaresCounted = parseInt(option.value);
+      updateSquaresCount(squaresCounted);
+    });
+  });
+
+  imageUpload.addEventListener('change', handleImageUpload);
+  zoomInButton.addEventListener('click', zoomIn);
+  zoomOutButton.addEventListener('click', zoomOut);
+
+  uploadedImage.addEventListener('mousedown', startDrag);
+  document.addEventListener('mousemove', dragImage);
+  document.addEventListener('mouseup', endDrag);
+
+  document.addEventListener('keydown', handleKeyDown);
+  uploadedImage.addEventListener('wheel', handleWheel);
+
+  function handleImageUpload(event) {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+
+    reader.onload = function() {
+      uploadedImage.src = reader.result;
+    }
+
+    if (file) {
+      reader.readAsDataURL(file);
+      // Hide the "Upload Image" label
+      document.querySelector('label[for="image-upload"]').style.display = 'none';
+    }
+  }
+
+  function zoomIn() {
+    scale += 0.1;
+    updateTransform();
+  }
+
+  function zoomOut() {
+    scale -= 0.1;
+    updateTransform();
+  }
+
+  function updateTransform() {
+    uploadedImage.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  }
+
+  function startDrag(event) {
+    isDragging = true;
+    startX = event.clientX - translateX;
+    startY = event.clientY - translateY;
+  }
+
+  function dragImage(event) {
+    if (isDragging) {
+      translateX = event.clientX - startX;
+      translateY = event.clientY - startY;
+      updateTransform();
+    }
+  }
+
+  function endDrag() {
+    isDragging = false;
+  }
+
+  function handleKeyDown(event) {
+    const step = 10;
+    switch (event.key) {
+      case 'ArrowUp':
+      case 'w':
+        translateY -= step;
+        break;
+      case 'ArrowDown':
+      case 's':
+        translateY += step;
+        break;
+      case 'ArrowLeft':
+      case 'a':
+        translateX -= step;
+        break;
+      case 'ArrowRight':
+      case 'd':
+        translateX += step;
+        break;
+      default:
+        break;
+    }
+    updateTransform();
+  }
+
+  function handleWheel(event) {
+    event.preventDefault();
+    if (event.deltaY < 0) {
+      zoomIn();
+    } else {
+      zoomOut();
+    }
+  }
+
+  function updateSquaresCount(value) {
+    // Clear previous cell counts
+    cellCountsContainer.innerHTML = '';
+
+    for (let i = 1; i <= value; i++) {
+      const squareRow = document.createElement('tr');
+      squareRow.innerHTML = `
+        <td>Square ${i}#</td>
+        <td><input type="number" class="viable-cells" data-index="${i}" value="0"></td>
+        <td><input type="number" class="non-viable-cells" data-index="${i}" value="0"></td>
+      `;
+      cellCountsContainer.appendChild(squareRow);
+    }
+
+    const viableCellsInputs = document.querySelectorAll('.viable-cells');
+    const nonViableCellsInputs = document.querySelectorAll('.non-viable-cells');
+
+    viableCellsInputs.forEach(input => {
+      input.addEventListener('input', updateTotalCounts);
+    });
+
+    nonViableCellsInputs.forEach(input => {
+      input.addEventListener('input', updateTotalCounts);
+    });
+
+    function updateTotalCounts() {
+      let totalViable = 0;
+      let totalNonViable = 0;
+
+      viableCellsInputs.forEach(input => {
+        totalViable += parseInt(input.value) || 0;
+      });
+
+      nonViableCellsInputs.forEach(input => {
+        totalNonViable += parseInt(input.value) || 0;
+      });
+
+      totalViableCells.textContent = totalViable;
+      totalNonViableCells.textContent = totalNonViable;
+
+      updateAverageViableCells(totalViable);
+      calculateConcentration(totalViable);
+      calculatePercentageViableCells(totalViable, totalViable + totalNonViable);
+    }
+
+    function updateAverageViableCells(totalViable) {
+      const countingOption = document.querySelector('input[name="counting-option"]:checked');
+      const squaresCounted = parseInt(countingOption.value);
+      const average = totalViable / squaresCounted || 0;
+      averageViableCells.textContent = average.toFixed(2); // Displaying up to 2 decimal places
+    }
+
+    const sampleVolumeInput = document.getElementById('sample-volume');
+    const dilutingLiquidVolumeInput = document.getElementById('diluting-liquid-volume');
+
+    sampleVolumeInput.addEventListener('input', calculateDilutionFactor);
+    dilutingLiquidVolumeInput.addEventListener('input', calculateDilutionFactor);
+
+    function calculateDilutionFactor() {
+      const sampleVolume = parseFloat(sampleVolumeInput.value);
+      const dilutingLiquidVolume = parseFloat(dilutingLiquidVolumeInput.value);
+
+      if (sampleVolume && dilutingLiquidVolume) {
+        const dilutionFactor = (sampleVolume + dilutingLiquidVolume) / sampleVolume;
+        dilutionFactorOutput.textContent = dilutionFactor.toFixed(2); // Display dilution factor with 2 decimal places
+        return dilutionFactor;
+      } else {
+        dilutionFactorOutput.textContent = ''; // Clear dilution factor if inputs are invalid
+        return 0;
+      }
+    }
+
+    function calculateConcentration(totalViable) {
+      const dilutionFactor = calculateDilutionFactor();
+      if (dilutionFactor !== 0) { // Check if dilution factor is valid
+        const averageViablePerSquare = parseFloat(averageViableCells.textContent);
+        const concentration = (averageViablePerSquare * dilutionFactor * Math.pow(10, 4)).toFixed(2);
+        concentrationOutput.textContent = concentration;
+      } else {
+        concentrationOutput.textContent = "0.00"; // Set concentration to 0 if dilution factor is not valid
+      }
+    }
+
+    function calculatePercentageViableCells(totalViable, totalCells) {
+      const percentage = ((totalViable / totalCells) * 100).toFixed(2);
+      percentageViableCellsOutput.textContent = percentage;
+    }
+  }
+</script>
+
+</body>
+</html>

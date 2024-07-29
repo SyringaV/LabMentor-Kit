@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LabMentor Kit - Calculator</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Include your existing styles from the imported stylesheet */
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f8f8f8;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    header {
+      background-color: #333;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 20px 100px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 100;
+    }
+
+    .logo {
+      font-size: 2em;
+      color: #fff;
+      user-select: none;
+    }
+
+    .navigation a {
+      position: relative;
+      font-size: 18px;
+      color: #fff;
+      text-decoration: none;
+      font-weight: 500;
+      margin-left: 40px;
+    }
+
+    .navigation a:after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -6px;
+      width: 100%;
+      height: 3px;
+      background: #fff;
+      border-radius: 5px;
+      transform-origin: right;
+      transform: scaleX(0);
+      transition: transform .5s;
+    }
+
+    .navigation a:hover::after {
+      transform-origin: left;
+      transform: scaleX(1);
+    }
+
+    .navigation .btnLogin-popup {
+      width: 130px;
+      height: 50px;
+      background: transparent;
+      border: 2px solid #fff;
+      outline: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1.1em;
+      color: #fff;
+      font-weight: 500;
+      margin-left: 40px;
+      transition: .5s;
+    }
+
+    .navigation .btnLogin-popup:hover {
+      background: #fff;
+      color: #162938;
+    }
+
+    .cta-box {
+      background-color: #f8f9fa;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      margin-top: 100px;
+      padding: 60px;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .cta-content {
+      flex: 1;
+      text-align: center;
+      margin-right: 20px;
+    }
+
+    .calculator-container {
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    .calculator {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .calculator-display {
+      width: 100%;
+      padding: 20px;
+      font-size: 2em;
+      text-align: right;
+      background-color: #e6f7ff;
+      border: 2px solid #0073e6;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+    }
+
+    .calculator-keys {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      width: 100%;
+    }
+
+    .calculator-keys button {
+      background-color: #0073e6;
+      color: white;
+      font-size: 1.5em;
+      border: none;
+      padding: 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      box-sizing: border-box;
+      width: 100%;
+    }
+
+    .calculator-keys button:hover {
+      background-color: #005bb5;
+    }
+
+    .calculator-keys button.operator {
+      background-color: #ff6600;
+    }
+
+    .calculator-keys button.operator:hover {
+      background-color: #e65c00;
+    }
+
+    .calculator-keys button.equal {
+      background-color: #28a745;
+    }
+
+    .calculator-keys button.equal:hover {
+      background-color: #218838;
+    }
+
+    .advanced-box {
+      position: fixed;
+      right: 20px;
+      top: 100px;
+      background-color: #ffffff;
+      border: 2px solid #0073e6;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      width: 250px;
+      text-align: center;
+    }
+
+    .advanced-box h2 {
+      font-size: 1.4em;
+      margin-bottom: 10px;
+    }
+
+    .advanced-box button {
+      background-color: #0073e6;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 1em;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .advanced-box button:hover {
+      background-color: #005bb5;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1 class="logo">LabMentor Kit</h1>
+    <nav class="navigation">
+      <a href="index.html" class="active">Home</a>
+      <a href="cell-counter.html">Cell Counter</a>
+      <a href="calculations.html">Calculations</a>
+      <a href="periodic_table.html">Periodic Table</a>
+      <a href="https://about.labxchange.org/types/virtual-lab-simulations" target="_blank">Virtual Lab</a>
+    </nav>
+  </header>
+
+  <div class="cta-box">
+    <div class="cta-content">
+      <h1>Calculator</h1>
+      <p>Use the calculator with your keyboard or mouse.</p>
+      <div class="calculator-container">
+        <div class="calculator">
+          <div class="calculator-display" id="display">0</div>
+          <div class="calculator-keys">
+            
+            <button data-number="7">7</button>
+            <button data-number="8">8</button>
+            <button data-number="9">9</button>
+            <button class="operator" data-operator="+">+</button>
+            <button data-number="4">4</button>
+            <button data-number="5">5</button>
+            <button data-number="6">6</button>
+            <button class="operator" data-operator="-">-</button>
+            <button data-number="1">1</button>
+            <button data-number="2">2</button>
+            <button data-number="3">3</button>
+            <button class="operator" data-operator="*">×</button>
+            <button data-number="0">0</button>
+            <button data-decimal=".">.</button>
+            <button class="equal" data-equal="=">=</button>
+            <button class="operator" data-operator="/">÷</button>
+            <button data-clear="clear">C</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="advanced-box">
+    <h2>Want an advanced calculator?</h2>
+    <a href="https://www.calculator.net/scientific-calculator.html" target="_blank">
+      <button>Advanced Calculator</button>
+    </a>
+  </div>
+
+  <script>
+    const display = document.getElementById('display');
+    const keys = document.querySelector('.calculator-keys');
+
+    let displayValue = '0';
+    let firstOperand = null;
+    let secondOperand = false;
+    let operator = null;
+
+    function updateDisplay() {
+      display.textContent = displayValue;
+    }
+
+    keys.addEventListener('click', (event) => {
+      const { target } = event;
+      const { value } = target;
+      if (!target.matches('button')) {
+        return;
+      }
+
+      if (target.dataset.number) {
+        inputDigit(target.dataset.number);
+        updateDisplay();
+      } else if (target.dataset.operator) {
+        handleOperator(target.dataset.operator);
+        updateDisplay();
+      } else if (target.dataset.decimal) {
+        inputDecimal(target.dataset.decimal);
+        updateDisplay();
+      } else if (target.dataset.clear) {
+        resetCalculator();
+        updateDisplay();
+      } else if (target.dataset.equal) {
+        handleOperator(target.dataset.equal);
+        updateDisplay();
+      }
+    });
+
+    function inputDigit(digit) {
+      if (secondOperand === true) {
+        displayValue = digit;
+        secondOperand = false;
+      } else {
+        displayValue = displayValue === '0' ? digit : displayValue + digit;
+      }
+    }
+
+    function inputDecimal(decimal) {
+      if (secondOperand === true) {
+        displayValue = '0.';
+        secondOperand = false;
+        return;
+      }
+      if (!displayValue.includes(decimal)) {
+        displayValue += decimal;
+      }
+    }
+
+    function handleOperator(nextOperator) {
+      const value = parseFloat(displayValue);
+
+      if (operator && secondOperand) {
+        operator = nextOperator;
+        return;
+      }
+
+      if (firstOperand === null) {
+        firstOperand = value;
+      } else if (operator) {
+        const result = calculate(firstOperand, value, operator);
+        displayValue = String(result);
+        firstOperand = result;
+      }
+
+      operator = nextOperator;
+      secondOperand = true;
+    }
+
+    function calculate(first, second, operator) {
+      if (operator === '+') return first + second;
+      if (operator === '-') return first - second;
+      if (operator === '*') return first * second;
+      if (operator === '/') return first / second;
+      return second;
+    }
+
+    function resetCalculator() {
+      displayValue = '0';
+      firstOperand = null;
+      operator = null;
+      secondOperand = false;
+    }
+  </script>
+</body>
+</html>

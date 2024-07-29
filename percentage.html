@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LabMentor Kit - Percentage by Volume Calculator</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .cta-box {
+      text-align: center;
+      margin-top: 100px;
+      max-width: 1000px;
+      margin: 20px auto;
+      padding: 20px;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .cta-content h1 {
+      font-size: 1.8em;
+      margin-bottom: 10px;
+    }
+
+    .cta-content p {
+      font-size: 1.2em;
+      margin-bottom: 20px;
+      color: #666;
+    }
+
+    .calculations {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
+
+    .calculation-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .calculation-options label {
+      width: 100%;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .calculation-options input,
+    .calculation-options select {
+      width: calc(50% - 20px);
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+      text-align: center;
+    }
+
+    .calculation-options select {
+      margin-left: 10px;
+    }
+
+    #solution-result {
+      margin-top: 20px;
+      padding: 15px;
+      border: 1px solid #7453fc;
+      border-radius: 5px;
+      background-color: #e6f7ff;
+      min-height: 50px;
+      width: 100%;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .cta-button {
+      width: 100%;
+      padding: 12px;
+      background-color: #7453fc;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      font-size: 1.1em;
+    }
+
+    .cta-button:hover {
+      background-color: #7453fc;
+    }
+
+    #result-conversion {
+      margin-top: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #result-conversion label {
+      margin-right: 10px;
+    }
+
+    #converted-result {
+      margin-top: 10px;
+      padding: 10px;
+      border: 1px solid #7453fc;
+      border-radius: 5px;
+      background-color: #e6f7ff;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1 class="logo">LabMentor Kit</h1>
+    <nav class="navigation">
+      <a href="index.html" class="active">Home</a>
+      <a href="cell-counter.html">Cell Counter</a>
+      <a href="calculations.html">Calculations</a>
+      <a href="periodic_table.html">Periodic Table</a>
+      <a href="https://about.labxchange.org/types/virtual-lab-simulations" target="_blank">Virtual Lab</a>
+    </nav>
+  </header>
+
+  <div class="cta-box" style="margin-top: 100px;">
+    <div class="calculations">
+      <h1>Solution Volume Calculator</h1>
+      <p>Calculate the volume of solute needed to prepare your solution.</p>
+      <div class="calculation-options">
+        <label for="concentration">Concentration (% v/v):</label>
+        <input type="number" id="concentration" name="concentration" placeholder="Enter concentration" required>
+        
+        <label for="final-volume">Final Volume:</label>
+        <input type="number" id="final-volume" name="final-volume" placeholder="Enter final volume" required>
+        <select id="volume-unit" name="volume-unit">
+          <option value="L">Liters (L)</option>
+          <option value="mL" selected>Milliliters (mL)</option>
+          <option value="μL">Microliters (μL)</option>
+        </select>
+      </div>
+      <button class="cta-button" onclick="calculateSolutionVolume()">Calculate</button>
+      <p id="solution-result"></p>
+      <div id="result-conversion">
+        <label for="result-unit">Convert Result to:</label>
+        <select id="result-unit" name="result-unit" onchange="convertResult()">
+          <option value="L">Liters (L)</option>
+          <option value="mL" selected>Milliliters (mL)</option>
+          <option value="μL">Microliters (μL)</option>
+        </select>
+        <p id="converted-result"></p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function calculateSolutionVolume() {
+      const concentration = parseFloat(document.getElementById('concentration').value);
+      const finalVolume = parseFloat(document.getElementById('final-volume').value);
+      const volumeUnit = document.getElementById('volume-unit').value;
+
+      // Conversion factors to milliliters
+      const unitConversions = {
+        'mL': 1,
+        'L': 1000,
+        'μL': 0.001
+      };
+
+      if (!isNaN(concentration) && !isNaN(finalVolume) && concentration > 0 && finalVolume > 0) {
+        // Convert final volume to milliliters
+        const finalVolumeInMl = finalVolume * unitConversions[volumeUnit];
+
+        // Calculate the volume of solute needed
+        const volumeOfSolute = finalVolumeInMl * (concentration / 100);
+
+        // Display result
+        document.getElementById('solution-result').textContent = `The volume of solute needed is ${volumeOfSolute.toFixed(2)} mL.`;
+        document.getElementById('result-conversion').style.display = 'block';
+        convertResult();
+      } else {
+        document.getElementById('solution-result').textContent = 'Please enter valid, positive numbers for all fields.';
+        document.getElementById('result-conversion').style.display = 'none';
+      }
+    }
+
+    function convertResult() {
+      const resultUnit = document.getElementById('result-unit').value;
+      const volumeOfSolute = parseFloat(document.getElementById('solution-result').textContent.match(/(\d+(\.\d+)?)/)[1]);
+
+      // Conversion factors from milliliters
+      const unitConversions = {
+        'L': 1000,
+        'mL': 1,
+        'μL': 0.001
+      };
+
+      const convertedVolume = volumeOfSolute / unitConversions[resultUnit];
+      document.getElementById('converted-result').textContent = `This is equivalent to ${convertedVolume.toFixed(2)} ${resultUnit}.`;
+    }
+  </script>
+</body>
+</html>

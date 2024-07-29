@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LabMentor Kit - pH Calculator</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+ 
+    .cta-box {
+      text-align: center;
+      margin: 100px auto 20px;
+      max-width: 800px;
+      padding: 20px;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .cta-content h1 {
+      font-size: 1.8em;
+      margin-bottom: 10px;
+    }
+
+    .cta-content p {
+      font-size: 1.2em;
+      margin-bottom: 20px;
+      color: #666;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .form-group label {
+      flex: 1;
+      font-weight: bold;
+      text-align: right;
+      margin-right: 10px;
+    }
+
+    .form-group input,
+    .form-group select {
+      flex: 2;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+      font-size: 1em;
+    }
+
+    
+
+    .result-container {
+      margin-top: 20px;
+    }
+
+    .result {
+      padding: 15px;
+      border: 1px solid #7453fc;
+      border-radius: 5px;
+      background-color: #e6f7ff;
+      min-height: 50px;
+      text-align: center;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1 class="logo">LabMentor Kit</h1>
+    <nav class="navigation">
+      <a href="index.html" class="active">Home</a>
+      <a href="cell-counter.html">Cell Counter</a>
+      <a href="calculations.html">Calculations</a>
+      <a href="periodic_table.html">Periodic Table</a>
+      <a href="https://about.labxchange.org/types/virtual-lab-simulations" target="_blank">Virtual Lab</a>
+    </nav>
+  </header>
+
+  <div class="cta-box">
+    <div class="cta-content">
+      <h1>pH Calculator</h1>
+      <p>Calculate pH, pOH, [H⁺], and [OH⁻] of a solution.</p>
+      <div class="form-group">
+        <label for="input-type">Input Type:</label>
+        <select id="input-type" onchange="toggleInputFields()">
+          <option value="H+" selected>Hydrogen Ion Concentration [H⁺]</option>
+          <option value="OH-">Hydroxide Ion Concentration [OH⁻]</option>
+          <option value="pH">pH</option>
+          <option value="pOH">pOH</option>
+        </select>
+      </div>
+      <div class="form-group" id="h-concentration-group">
+        <label for="h-concentration">[H⁺] Concentration:</label>
+        <input type="number" id="h-concentration" placeholder="Enter [H⁺] (e.g., 1e-7)" step="any">
+        <span>M</span>
+      </div>
+      <div class="form-group" id="oh-concentration-group" style="display:none;">
+        <label for="oh-concentration">[OH⁻] Concentration:</label>
+        <input type="number" id="oh-concentration" placeholder="Enter [OH⁻] (e.g., 1e-7)" step="any">
+        <span>M</span>
+      </div>
+      <div class="form-group" id="ph-group" style="display:none;">
+        <label for="ph">pH:</label>
+        <input type="number" id="ph" placeholder="Enter pH" step="any">
+      </div>
+      <div class="form-group" id="poh-group" style="display:none;">
+        <label for="poh">pOH:</label>
+        <input type="number" id="poh" placeholder="Enter pOH" step="any">
+      </div>
+      <button class="cta-button" onclick="calculateValues()">Calculate</button>
+      <div class="result-container">
+        <div class="result" id="result">
+          <p id="result-text"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function toggleInputFields() {
+      const inputType = document.getElementById('input-type').value;
+      document.getElementById('h-concentration-group').style.display = (inputType === 'H+') ? 'flex' : 'none';
+      document.getElementById('oh-concentration-group').style.display = (inputType === 'OH-') ? 'flex' : 'none';
+      document.getElementById('ph-group').style.display = (inputType === 'pH') ? 'flex' : 'none';
+      document.getElementById('poh-group').style.display = (inputType === 'pOH') ? 'flex' : 'none';
+      document.getElementById('result-text').textContent = '';
+    }
+
+    function calculateValues() {
+      const inputType = document.getElementById('input-type').value;
+      let pH, pOH, hConcentration, ohConcentration, resultText;
+
+      switch (inputType) {
+        case 'H+':
+          hConcentration = parseFloat(document.getElementById('h-concentration').value);
+          if (isNaN(hConcentration) || hConcentration <= 0) {
+            document.getElementById('result-text').textContent = 'Please enter a valid, positive number for [H⁺] concentration.';
+            return;
+          }
+          pH = -Math.log10(hConcentration);
+          pOH = 14 - pH;
+          ohConcentration = Math.pow(10, -pOH);
+          resultText = `pH: ${pH.toFixed(2)}\n[H⁺]: ${hConcentration.toExponential(2)} M\npOH: ${pOH.toFixed(2)}\n[OH⁻]: ${ohConcentration.toExponential(2)} M`;
+          break;
+
+        case 'OH-':
+          ohConcentration = parseFloat(document.getElementById('oh-concentration').value);
+          if (isNaN(ohConcentration) || ohConcentration <= 0) {
+            document.getElementById('result-text').textContent = 'Please enter a valid, positive number for [OH⁻] concentration.';
+            return;
+          }
+          pOH = -Math.log10(ohConcentration);
+          pH = 14 - pOH;
+          hConcentration = Math.pow(10, -pH);
+          resultText = `pH: ${pH.toFixed(2)}\n[H⁺]: ${hConcentration.toExponential(2)} M\npOH: ${pOH.toFixed(2)}\n[OH⁻]: ${ohConcentration.toExponential(2)} M`;
+          break;
+
+        case 'pH':
+          pH = parseFloat(document.getElementById('ph').value);
+          if (isNaN(pH) || pH < 0 || pH > 14) {
+            document.getElementById('result-text').textContent = 'Please enter a valid pH value between 0 and 14.';
+            return;
+          }
+          hConcentration = Math.pow(10, -pH);
+          pOH = 14 - pH;
+          ohConcentration = Math.pow(10, -pOH);
+          resultText = `pH: ${pH.toFixed(2)}\n[H⁺]: ${hConcentration.toExponential(2)} M \n pOH: ${pOH.toFixed(2)}\n[OH⁻]: ${ohConcentration.toExponential(2)} M`;
+          break;
+
+        case 'pOH':
+          pOH = parseFloat(document.getElementById('poh').value);
+          if (isNaN(pOH) || pOH < 0 || pOH > 14) {
+            document.getElementById('result-text').textContent = 'Please enter a valid pOH value between 0 and 14.';
+            return;
+          }
+          ohConcentration = Math.pow(10, -pOH);
+          pH = 14 - pOH;
+          hConcentration = Math.pow(10, -pH);
+          resultText = `pH: ${pH.toFixed(2)}\n[H⁺]: ${hConcentration.toExponential(2)} M\npOH: ${pOH.toFixed(2)}\n[OH⁻]: ${ohConcentration.toExponential(2)} M`;
+          break;
+
+        default:
+          resultText = 'Invalid input type.';
+          break;
+      }
+
+      document.getElementById('result-text').textContent = resultText;
+    }
+  </script>
+</body>
+</html>
